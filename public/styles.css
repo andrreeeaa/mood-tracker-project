@@ -1,0 +1,400 @@
+/* --- 1. DEFINIREA VARIABILELOR (STYLE GUIDE) --- */
+:root {
+    /* TYPOGRAPHY */
+    --font-main: 'Reddit Sans', sans-serif;
+
+    /* COLORS - NEUTRAL */
+    --neutral-900: #21214D; /* Titluri închise */
+    --neutral-600: #57577B; /* Text secundar */
+    --neutral-300: #9393B7;
+    --neutral-200: #CBCDD0; /* Borduri */
+    --neutral-0:   #FFFFFF; /* Fundal carduri */
+
+    /* COLORS - PRIMARY BLUE */
+    --blue-700: #2A4CD5; /* Butoane Hover */
+    --blue-600: #4865DB; /* Butoane Normal */
+    --blue-200: #C7D3F7;
+    --blue-100: #E0E6FA;
+
+    /* COLORS - MOODS */
+    --mood-very-sad: #FF9B99;  /* Red 300 */
+    --mood-sad:      #B8B1FF;  /* Indigo 200 */
+    --mood-neutral:  #89CAFF;  /* Blue 300 */
+    --mood-happy:    #89E780;  /* Green 300 */
+    --mood-very-happy: #FFC97C; /* Amber 300 */
+
+    /* BACKGROUND GRADIENT */
+    --bg-gradient: linear-gradient(180deg, #F5F5FF 0%, #E0E0FF 100%);
+    
+    /* SPACING & RADIUS */
+    --radius-card: 24px;
+    --radius-btn: 12px;
+    --radius-input: 12px;
+}
+
+/* --- 2. GLOBAL RESET --- */
+* { box-sizing: border-box; } /* CRITIC: Asigură că padding-ul nu mărește lățimea */
+
+body {
+    margin: 0;
+    font-family: var(--font-main);
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    color: var(--neutral-900);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* --- 3. TYPOGRAPHY --- */
+h1 { font-size: 52px; line-height: 1.2; font-weight: 700; margin: 0 0 10px 0; color: var(--neutral-900); }
+h2 { font-size: 40px; font-weight: 700; margin: 0 0 20px 0; }
+h3 { font-size: 24px; font-weight: 700; margin: 0 0 15px 0; }
+p { font-size: 18px; color: var(--neutral-600); line-height: 1.5; margin: 0 0 10px 0; }
+
+/* --- 4. NAVBAR & USER --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+}
+.logo { 
+    font-weight: 700; 
+    font-size: 20px; 
+    color: var(--neutral-900); 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+.logo svg {
+    height: 32px; /* Înălțime fixă pentru navbar */
+    width: auto;  /* Lățimea se ajustează automat */
+}
+
+/* FIX AVATAR */
+.user-profile { 
+    position: relative; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+.user-profile img {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    border: 2px solid var(--neutral-200);
+}
+/* Stiluri pentru săgeata SVG */
+.chevron-icon {
+    display: block; /* Ca să nu aibă spațiu ciudat sub ea */
+    width: 11px;
+    height: 6px;
+    transition: transform 0.2s ease; /* Animație fină la rotire */
+}
+/* Opțional: Rotire când meniul e deschis (Adaugă clasa .rotate din JS) */
+.chevron-icon.rotate {
+    transform: rotate(180deg);
+}
+/* --- DROPDOWN MENU STYLING (FINAL) --- */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px; /* Puțin mai jos de avatar */
+    right: 0;
+    background: white;
+    width: 240px; /* Mai lat ca să încapă emailul */
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(33, 33, 77, 0.15); /* Umbră fină */
+    padding: 8px; /* Spațiu mic pe margini */
+    z-index: 100;
+    border: 1px solid #F3F4F6;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-menu.show { display: block; }
+
+.dropdown-header {
+    padding: 12px 16px;
+}
+
+.dropdown-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--neutral-900);
+    margin: 0;
+}
+
+.dropdown-email {
+    font-size: 13px;
+    color: var(--neutral-600);
+    margin: 4px 0 0 0;
+    word-break: break-all; /* Dacă emailul e lung, îl rupe */
+}
+
+.dropdown-divider {
+    border: 0;
+    height: 1px;
+    background: #E5E7EB;
+    margin: 8px 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--neutral-600);
+    font-family: var(--font-main);
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #F3F4F6;
+    color: var(--blue-600);
+}
+
+.dropdown-item svg {
+    stroke: currentColor; /* Ia culoarea textului automat */
+}
+
+/* --- 5. HERO & DASHBOARD --- */
+.hero-section { 
+    text-align: center; 
+    padding: 80px 20px; 
+}
+.hero-logged-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 30px; 
+    align-items: center; 
+    padding: 40px 0; 
+}
+.big-emoji { 
+    font-size: 120px; 
+    text-align: center; 
+}
+.hero-left { 
+    text-align: left; 
+}
+.hero-right { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+.mini-card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 16px; 
+    font-size: 16px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+}
+
+.dashboard-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 2fr; 
+    gap: 32px; 
+    margin-top: 40px; 
+}
+
+/* --- 6. COMPONENTS --- */
+.card, .stat-card, .chart-section {
+    background: var(--neutral-0); border-radius: var(--radius-card); padding: 32px;
+    box-shadow: 0 4px 20px rgba(33, 33, 77, 0.05); margin-bottom: 24px;
+}
+
+/* Modificare: Carduri mai aerisite */
+.stat-card {
+    min-height: 180px; 
+    display: flex; flex-direction: column; justify-content: center;
+}
+.stat-card h2 { font-size: 32px; margin: 15px 0; }
+
+/* Modificare: Grafic mai înalt */
+.chart-wrapper { height: 380px; width: 100%; }
+
+.stat-card.mood-gradient { background: linear-gradient(135deg, #E0E6FA 0%, #FFFFFF 100%); border: 1px solid var(--blue-100); }
+.stat-card.sleep-gradient { background: linear-gradient(135deg, var(--neutral-200) 0%, #FFFFFF 100%); }
+
+.primary-btn {
+    background-color: var(--blue-600); color: white; border: none; padding: 16px 32px;
+    border-radius: var(--radius-btn); font-size: 18px; font-weight: 600; cursor: pointer;
+    transition: background 0.2s; width: auto; display: inline-block;
+}
+.primary-btn:hover { background-color: var(--blue-700); }
+.full-width { width: 100%; margin-top: 20px; }
+
+/* --- 7. MODALE & WIZARD (NOU!) --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(33, 33, 77, 0.6); /* Backdrop întunecat */
+    backdrop-filter: blur(4px);
+    display: none; justify-content: center; align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: white; padding: 40px; border-radius: 24px;
+    width: 500px; max-width: 90%; position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.close-btn { position: absolute; top: 20px; right: 20px; font-size: 28px; cursor: pointer; color: var(--neutral-300); }
+.close-btn:hover { color: var(--neutral-900); }
+
+/* --- WIZARD STEPS --- */
+.progress-bar { display: flex; gap: 8px; margin-bottom: 30px; }
+.step-dash { flex: 1; height: 4px; background: #E0E6FA; border-radius: 2px; transition: background 0.3s; }
+.step-dash.active { background: var(--blue-600); }
+
+.selection-list { display: flex; flex-direction: column; gap: 12px; }
+
+.option-btn {
+    display: flex; justify-content: space-between; align-items: center; padding: 16px;
+    border: 1px solid var(--neutral-200); border-radius: 12px; background: white;
+    cursor: pointer; transition: all 0.2s; font-weight: 600; color: var(--neutral-600);
+}
+.option-btn:hover { border-color: var(--blue-600); background: #F5F7FF; }
+.option-btn.selected {
+    border-color: var(--blue-600); background: #EEF2FF; color: var(--blue-600);
+    box-shadow: 0 0 0 1px var(--blue-600);
+}
+
+.radio-circle {
+    width: 20px; height: 20px; border: 2px solid var(--neutral-300); border-radius: 50%;
+    margin-right: 12px; position: relative;
+}
+.option-btn.selected .radio-circle { border-color: var(--blue-600); }
+.option-btn.selected .radio-circle::after {
+    content: ''; position: absolute; top: 4px; left: 4px; width: 8px; height: 8px;
+    background: var(--blue-600); border-radius: 50%;
+}
+
+/* TAGS */
+.tags-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.tag-chip {
+    padding: 10px 20px; border: 1px solid var(--neutral-200); border-radius: 8px;
+    cursor: pointer; background: white; font-size: 14px; color: var(--neutral-600);
+}
+.tag-chip:hover { border-color: var(--blue-600); }
+.tag-chip.selected { background: var(--blue-600); color: white; border-color: var(--blue-600); }
+
+/* INPUTS */
+input, textarea {
+    width: 100%; padding: 16px; border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-input); font-family: var(--font-main); font-size: 16px;
+    margin-bottom: 10px; outline: none;
+}
+input:focus, textarea:focus { border-color: var(--blue-600); border-width: 2px; padding: 15px; }
+textarea { resize: none; height: 120px; }
+.char-count { text-align: right; font-size: 12px; color: var(--neutral-300); }
+
+/* --- MOOD CARD VARIANTS --- */
+/* Very Sad (Red) */
+.mood-card-1 {
+    background: linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%);
+    border: 1px solid #FECDD3;
+    color: #9F1239;
+}
+/* Sad (Indigo/Purple) */
+.mood-card-2 {
+    background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);
+    border: 1px solid #C7D2FE;
+    color: #3730A3;
+}
+/* Neutral (Blue) */
+.mood-card-3 {
+    background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+    border: 1px solid #BFDBFE;
+    color: #1E40AF;
+}
+/* Happy (Green) */
+.mood-card-4 {
+    background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%);
+    border: 1px solid #BBF7D0;
+    color: #166534;
+}
+/* Very Happy (Amber/Orange) */
+.mood-card-5 {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border: 1px solid #FDE68A;
+    color: #92400E;
+}
+
+/* Sleep Card e mereu la fel (Indigo Dark) */
+.sleep-card-active {
+    background: linear-gradient(135deg, #4338CA 0%, #312E81 100%);
+    color: white; /* Text alb pe fundal închis */
+}
+.sleep-card-active h4, .sleep-card-active p { 
+    opacity: 0.9; 
+    color: #E0E7FF; 
+}
+
+.edit-btn {
+    background: transparent;
+    border: 1px solid var(--neutral-200);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--neutral-600);
+    transition: all 0.2s;
+}
+.edit-btn:hover {
+    background: white;
+    color: var(--blue-600);
+    border-color: var(--blue-600);
+}
+
+/* --- ERROR STATES --- */
+.input-error {
+    border: 2px solid #EF4444 !important; /* Roșu */
+    animation: shake 0.4s ease-in-out;
+}
+
+.error-message {
+    color: #EF4444;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none; /* Ascuns implicit */
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .hero-logged-grid { grid-template-columns: 1fr; text-align: center; }
+    .hero-right { text-align: left; }
+    h1 { font-size: 36px; }
+}
