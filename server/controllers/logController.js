@@ -2,38 +2,56 @@
 const DailyLog = require('../models/DailyLog');
 const User = require('../models/user');
 
-// 1. SALVARE STARE (Create)
+// 1. SALVARE SAU ACTUALIZARE (Create / Update Today)
 const createLog = async (req, res) => {
     try {
-        //destructurare
         const { moodScore, feelings, journalEntry, sleepHours } = req.body;
-
-        // TRUC PENTRU TESTARE:
-        // Deocamdată nu avem Login funcțional. Așa că vom căuta automat userul de test
-        // și îi vom atribui lui această stare.
-        const user = await User.findOne({ email: 'test@moodtracker.com' });
         
-        if (!user) {
-            return res.status(404).json({ error: "Utilizatorul de test nu a fost găsit. Rulează seedDB!" });
-        }
+        // 1. Găsim userul
+        const user = await User.findOne({ email: 'test@moodtracker.com' });
+        if (!user) return res.status(404).json({ error: "Utilizator test negăsit" });
 
-        // Creăm log-ul în memorie
-        const newLog = await DailyLog.create({
-            userID: user._id, // Folosim ID-ul găsit
-            date: new Date(), // Punem data/ora curentă
-            moodScore,
-            feelings,
-            journalEntry,
-            sleepHours
+        // 2. Definim intervalul "AZI" (de la 00:00 la 23:59)
+        const startODay = new Date();
+        startODay.setHours(0, 0, 0, 0);
+        
+        const endODay = new Date();
+        endODay.setHours(23, 59, 59, 999);
+
+        // 3. Căutăm dacă există deja un log PE ZIUA DE AZI
+        let log = await DailyLog.findOne({
+            userID: user._id,
+            date: { $gte: startODay, $lte: endODay }
         });
 
-        // Răspundem cu succes (201 Created)
-        res.status(201).json(newLog);
+        if (log) {
+            // SCENARIUL A: UPDATE (Există deja)
+            log.moodScore = moodScore;
+            log.feelings = feelings;
+            log.journalEntry = journalEntry;
+            log.sleepHours = sleepHours;
+            // Nu schimbăm data, ca să nu strice ordinea, sau o actualizăm la "acum"
+            // log.date = new Date(); 
+            
+            await log.save();
+            return res.status(200).json(log); // 200 OK (Updated)
+
+        } else {
+            // SCENARIUL B: CREATE (Nu există)
+            const newLog = await DailyLog.create({
+                userID: user._id,
+                date: new Date(),
+                moodScore,
+                feelings,
+                journalEntry,
+                sleepHours
+            });
+            return res.status(201).json(newLog); // 201 Created
+        }
 
     } catch (error) {
-        // Dacă userul a mai logat o dată azi (unique: true la dată), va intra aici
         console.error(error);
-        res.status(400).json({ error: 'Nu am putut salva. Posibil ai logat deja azi?' });
+        res.status(400).json({ error: 'Eroare la salvare.' });
     }
 };
 

@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 //Permite Express să parseze JSON din corpul cererilor (POST/PUT)
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Conexiune baza de date
 mongoose.connect(process.env.MONGO_URI)
