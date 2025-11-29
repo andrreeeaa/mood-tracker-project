@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB conectat cu succes'))
     .catch(err => console.error('Eroare conexiune MongoDB:', err));
 
-// --- ACTIVARE RUTE (NOU) ---
+// --- ACTIVARE RUTE  ---
 app.use('/api/logs', logsRouter);     // Rutele pentru logs
 app.use('/api/quotes', quotesRouter); // Rutele pentru quotes
 
